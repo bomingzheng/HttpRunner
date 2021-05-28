@@ -1,0 +1,607 @@
+
+config:
+    name: 后台接口请求
+    variables:
+        headers:
+            Content-Type: application/json
+        vip: 1819
+        sign: ccdb633eca57bf4bd8c63c1060c3747f4212b53a
+        channel: 1823
+        client: 10002814
+    base_url: ${ENV(host)}
+    verify: False
+
+teststeps:
+-
+    name: 渠道新用户
+    request:
+        method: POST
+        url: /channeldata/data/user/list
+        json:
+            channel_id: $channel
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers:
+            $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: VIP新用户
+    request:
+        method: POST
+        url: /channeldata/data/user/list
+        json:
+            vip_id: $vip
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: 渠道活跃用户
+    request:
+        method: POST
+        url: /channeldata/data/user/activeList
+        json:
+            channel_id: $channel
+            search_date: ${search_date()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: VIP活跃用户
+    request:
+        method: POST
+        url: /channeldata/data/user/activeList
+        json:
+            vip_id: $vip
+            search_date: ${search_date()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: 渠道用户总统计
+    request:
+        method: POST
+        url: /channeldata/data/user/collect
+        json:
+            channel_id: $channel
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: VIP用户总统计
+    request:
+        method: POST
+        url: /channeldata/data/user/collect
+        json:
+            vip_id: $vip
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: 渠道按日期统计用户
+    request:
+        method: POST
+        url: /channeldata/data/user/dayCollect
+        json:
+            channel_id: $channel
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: VIP按日期统计用户
+    request:
+        method: POST
+        url: /channeldata/data/user/dayCollect
+        json:
+            vip_id: $vip
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: 用户阅读留存
+    request:
+        method: POST
+        url: /channeldata/data/Readretention/list
+        json:
+            channel_id: $channel
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: VIP用户阅读留存
+    request:
+        method: POST
+        url: /channeldata/data/Readretention/list
+        json:
+            vip_id: $vip
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: 渠道客服消息
+    request:
+        method: POST
+        url: /channeldata/data/custom/urlCollect
+        json:
+            channel_id: $channel
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: VIP客服消息
+    request:
+        method: POST
+        url: /channeldata/data/custom/urlCollect
+        json:
+            vip_id: $vip
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: 渠道客服按日期消息
+    request:
+        method: POST
+        url: /channeldata/data/user/dayCollect
+        json:
+            channel_id: $channel
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: VIP客服按日期消息
+    request:
+        method: POST
+        url: /channeldata/data/user/dayCollect
+        json:
+            vip_id: $vip
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: 获取VIP下渠道信息
+    request:
+        method: POST
+        url: /channeldata/data/account/list
+        json:
+            vip_id: $vip
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: 渠道订单信息
+    request:
+        method: POST
+        url: /channeldata/data/orders/list
+        json:
+            channel_id: $channel
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: VIP订单信息
+    request:
+        method: POST
+        url: /channeldata/data/orders/list
+        json:
+            vip_id: $vip
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: 渠道充值记录
+    request:
+        method: POST
+        url: /channeldata/data/recharge/list
+        json:
+            channel_id: $channel
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: VIP充值记录
+    request:
+        method: POST
+        url: /channeldata/data/recharge/list
+        json:
+            vip_id: $vip
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: 渠道消费记录
+    request:
+        method: POST
+        url: /channeldata/data/consume/list
+        json:
+            channel_id: $channel
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: VIP消费记录
+    request:
+        method: POST
+        url: /channeldata/data/consume/list
+        json:
+            vip_id: $vip
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: VIP阅读记录
+    request:
+        method: POST
+        url: /channeldata/data/readrecently/list
+        json:
+            vip_id: $vip
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: 渠道阅读记录
+    request:
+        method: POST
+        url: /channeldata/data/readrecently/list
+        json:
+            channel_id: $channel
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: 渠道推广链接
+    request:
+        method: POST
+        url: /channeldata/data/referral/list
+        json:
+            channel_id: $channel
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: VIP推广链接
+    request:
+        method: POST
+        url: /channeldata/data/referral/list
+        json:
+            vip_id: $vip
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: VIP按日期统计推广链接
+    request:
+        method: POST
+        url: /channeldata/data/referral/collect
+        json:
+            vip_id: $vip
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: 渠道按日期统计推广链接
+    request:
+        method: POST
+        url: /channeldata/data/referral/collect
+        json:
+            channel_id: $channel
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: 渠道按日期统计自定义活动
+    request:
+        method: POST
+        url: /channeldata/data/activity/dayCollect
+        json:
+            channel_id: $channel
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: VIP按日期统计自定义活动
+    request:
+        method: POST
+        url: /channeldata/data/activity/dayCollect
+        json:
+            vip_id: $vip
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: VIP查询自定义活动
+    request:
+        method: POST
+        url: /channeldata/data/activity/list
+        json:
+            vip_id: $vip
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: 渠道查询自定义活动
+    request:
+        method: POST
+        url: /channeldata/data/activity/list
+        json:
+            channel_id: $channel
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: 渠道统计自定义活动链接
+    request:
+        method: POST
+        url: /channeldata/data/activity/collect
+        json:
+            channel_id: $channel
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: VIP统计自定义活动链接
+    request:
+        method: POST
+        url: /channeldata/data/activity/collect
+        json:
+            vip_id: $vip
+            start_time: ${start_time()}
+            end_time: ${end_time()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: VIP充值分析
+    request:
+        method: POST
+        url: /channeldata/data/rechargenew/list
+        json:
+            vip_id: $vip
+            start_date: ${start_date()}
+            end_date: ${end_date()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
+
+-
+    name: 渠道充值分析
+    request:
+        method: POST
+        url: /channeldata/data/rechargenew/list
+        json:
+            channel_id: $channel
+            start_date: ${start_date()}
+            end_date: ${end_date()}
+            client_id: $client
+            nonce: "123456"
+            timestamp: 1583868236
+            signaure: $sign
+        headers: $headers
+    validate:
+        -  {"check": "content", "comparator": "assert_back", "expect": "content.error_code,content.data"}
