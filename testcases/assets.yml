@@ -1,0 +1,579 @@
+config:
+    name: 资产变更接口集
+    variables:
+        user_id: 110000123
+        user_id1: 110000230
+        user_id2: 110000061
+        book_id: 11000000251
+        user_id3: 110000166
+    request:
+        headers:
+            Content-Type: application/json
+    base_url: ${ENV(assets_url)}
+    verify: False
+
+teststeps:
+-
+    name: 消费记录1201*查用户
+    request:
+        method: POST
+        url: /cpsconsume/portal/1201
+        json:
+            user_id: $user_id
+            page: 3
+            size: 11
+            requestId: ${requestId()}
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.pageNo,3]
+        - eq: [content.data.data.0.user_id,$user_id]
+
+-
+    name: 消费记录1201*查书籍
+    request:
+        url: /cpsconsume/portal/1201
+        json:
+            user_id: $user_id
+            book_id: $book_id
+            page: 1
+            size: 1
+            requestId: ${requestId()}
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.pageNo,1]
+        - eq: [content.data.data.0.user_id,$user_id]
+        - eq: [content.data.data.0.book_id,$book_id]
+
+-
+    name: 消费记录1201*未消费
+    request:
+        url: /cpsconsume/portal/1201
+        json:
+            user_id: 10
+            book_id: $book_id
+            page: 1
+            requestId: ${requestId()}
+            size: 1
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.totalNum,0]
+        - eq: [content.data.data,[]]
+
+-
+    name: 前台加资产1300
+    request:
+        url: /cpsconsume/portal/1300
+        json:
+            user_id: $user_id
+            type: 1
+            kandian: 100
+            free_kandian: 120
+            remain_kandian: 100
+            remain_free_kandian: 120
+            dd: ${dd()}
+            requestId: ${requestId()}
+            free_endtime: ${end_timestamp()}
+            notes: 011
+            way_type: 0
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.retCode,5]
+        - eq: [content.data.retMsg,充值成功]
+        - contains: [content.data.data,kandian]
+
+-
+    name: 前台减资产1300
+    request:
+        url: /cpsconsume/portal/1300
+        json:
+            user_id: $user_id
+            type: 1
+            kandian: 100
+            free_kandian: 120
+            remain_kandian: 100
+            remain_free_kandian: 120
+            dd: ${dd()}
+            requestId: ${requestId()}
+            free_endtime: ${end_timestamp()}
+            notes: 011
+            way_type: 1
+            reduce_num: 1
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.retCode,6]
+        - eq: [content.data.retMsg,消费成功]
+        - contains: [content.data.data,""]
+
+-
+    name: 前台加VIP1300
+    request:
+        url: /cpsconsume/portal/1300
+        json:
+            type: 2
+            dd: ${dd()}
+            day: 3
+            hour: 10
+            edit_type: 1
+            extend_type: 1
+            user_id: $user_id
+            requestId: ${requestId()}
+            vip_starttime: ${end_timestamp()}
+            channel_vip_starttime: ${end_timestamp()}
+            notes: 110
+            business_line: 011
+            way_type: 0
+            reduce_num: 1
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.retCode,5]
+        - eq: [content.data.retMsg,充值成功]
+        - contains: [content.data.data,kandian]
+-
+    name: 前台减VIP1300
+    request:
+        url: /cpsconsume/portal/1300
+        json:
+            type: 2
+            dd: ${dd()}
+            day: -1
+            hour: -1
+            edit_type: 1
+            requestId: ${requestId()}
+            extend_type: 1
+            user_id: $user_id
+            notes: 110
+            business_line: 011
+            way_type: 1
+            reduce_num: 1
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.retCode,6]
+        - eq: [content.data.retMsg,消费成功]
+        - eq: [content.data.data,""]
+
+-
+    name: 前台减书币1300(书币不足）
+    request:
+        url: /cpsconsume/portal/1300
+        json:
+            user_id: $user_id1
+            type: 1
+            kandian: 100
+            free_kandian: 120
+            remain_kandian: 100
+            remain_free_kandian: 120
+            dd: ${dd()}
+            requestId: ${requestId()}
+            free_endtime: ${end_timestamp()}
+            notes: 011
+            way_type: 1
+            reduce_num: 10000
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.retCode,-6]
+        - eq: [content.data.retMsg,消费失败]
+        - eq: [content.data.data,""]
+-
+    name: 系统赠送+资产1300
+    request:
+        url: /cpsconsume/portal/1300
+        json:
+            type: 3
+            kandian: 10
+            free_kandian: 12
+            remain_kandian: 100
+            remain_free_kandian: 120
+            dd: ${dd()}
+            user_id: $user_id1
+            requestId: ${requestId()}
+            free_endtime: ${end_timestamp()}
+            notes: 110
+            business_line: 011
+            way_type: 0
+            reduce_num: 1
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.retCode,5]
+        - eq: [content.data.retMsg,充值成功]
+        - contains: [content.data.data,kandian]
+
+-
+    name: 系统赠送-资产扣量1300
+    request:
+        url: /cpsconsume/portal/1300
+        json:
+            type: 3
+            kandian: 10
+            free_kandian: 12
+            remain_kandian: 10
+            remain_free_kandian: 12
+            dd: ${dd()}
+            requestId: ${requestId()}
+            user_id: $user_id1
+            notes: 110
+            business_line: 011
+            way_type: 1
+            reduce_num: 1
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.retCode,6]
+        - eq: [content.data.retMsg,消费成功]
+        - eq: [content.data.data,""]
+
+-
+    name: 系统+VIP_1300
+    request:
+        url: /cpsconsume/portal/1300
+        json:
+            type: 4
+            dd: ${dd()}
+            day: 5
+            hour: 1
+            edit_type: 1
+            extend_type: 1
+            user_id: $user_id1
+            requestId: ${requestId()}
+            vip_starttime: ${end_timestamp()}
+            channel_vip_starttime: ${end_timestamp()}
+            notes: 110
+            business_line: 011
+            way_type: 0
+            reduce_num: 1
+        method: POST
+    validate:
+        - eq: [ content.status,0]
+        - eq: [ content.data.retCode,5]
+        - eq: [ content.data.retMsg,充值成功]
+        - contains: [ content.data.data,kandian]
+
+-
+    name: 系统-VIP_1300
+    request:
+        url: /cpsconsume/portal/1300
+        json:
+            type: 4
+            dd: ${dd()}
+            day: 1
+            hour: 1
+            edit_type: 1
+            extend_type: 1
+            user_id: $user_id1
+            requestId: ${requestId()}
+            vip_starttime: ${end_timestamp()}
+            channel_vip_starttime: ${end_timestamp()}
+            notes: 110
+            business_line: 011
+            way_type: 0
+            reduce_num: 1
+        method: POST
+    validate:
+        - eq: [ content.status,0]
+        - eq: [ content.data.retCode,5]
+        - eq: [ content.data.retMsg,充值成功]
+        - contains: [ content.data.data,kandian]
+-
+    name: 签到1300
+    request:
+        url: /cpsconsume/portal/1300
+        json:
+            type: 5
+            kandian: 10
+            free_kandian: 12
+            remain_kandian: 100
+            remain_free_kandian: 120
+            dd: 0
+            requestId: ${requestId()}
+            free_endtime: ${end_timestamp()}
+            user_id: $user_id2
+            notes: 110
+            business_line: 011
+            way_type: 0
+            reduce_num: 1
+        method: POST
+    validate:
+        - eq: [ content.status,0]
+        - eq: [ content.data.retCode,5 ]
+        - eq: [ content.data.retMsg,充值成功]
+        - contains: [ content.data.data,kandian]
+
+-
+    name: 活动赠送书币1300
+    request:
+        url: /cpsconsume/portal/1300
+        json:
+            type: 6
+            kandian: 10
+            free_kandian: 12
+            remain_kandian: 100
+            remain_free_kandian: 120
+            dd: ${dd()}
+            requestId: ${requestId()}
+            free_endtime: ${end_timestamp()}
+            vip_starttime: ${end_timestamp()}
+            channel_vip_starttime: ${end_timestamp()}
+            user_id: $user_id2
+            notes: 110
+            business_line: 011
+            way_type: 0
+            reduce_num: 1
+        method: POST
+    validate:
+        - eq: [ content.status,0]
+        - eq: [ content.data.retCode,5]
+        - eq: [ content.data.retMsg,充值成功]
+        - contains: [ content.data.data,kandian]
+
+
+-
+    name: 按章消费1200
+    request:
+        url: /cpsconsume/portal/1200
+        json:
+            type: 1
+            kandian: 1
+            free_kandian: 1
+            user_id: $user_id2
+            chapter_name: 011
+            requestId: ${requestId()}
+            extend1: 110
+            book_name: 121
+            extend2: 221
+            chapter_id: 342
+            book_id: $book_id
+            dd_kandian: ${dd()}
+            consume_info: qws
+            reduce_kandian: 1
+        method: POST
+    validate:
+        - eq: [ content.status,0]
+        - contained_by: [ content.data.retCode,[1,7]]
+-
+    name: 按本消费1200
+    request:
+        url: /cpsconsume/portal/1200
+        json:
+            type: 2
+            kandian: 1
+            free_kandian: 1
+            user_id: $user_id2
+            chapter_name: 011
+            book_name: edcf
+            requestId: ${requestId()}
+            extend1: 110
+            extend2: qa
+            book_id: ${random_book()}
+            dd_kandian: ${dd()}
+            consume_info: qws
+            reduce_kandian: 1
+        method: POST
+    validate:
+        - eq: [ content.status,0]
+        - eq: [ content.data.retCode,1]
+        - eq: [ content.data.retMsg,成功]
+        - contains: [ content.data.data,kandian]
+
+-
+    name: 读书挑战赛1200
+    request:
+        url: /cpsconsume/portal/1200
+        json:
+            type: 3
+            kandian: 1
+            free_kandian: 1
+            chapter_name: 110
+            extend1: 011
+            book_id: $book_id
+            requestId: ${requestId()}
+            user_id: $user_id2
+            extend2: qa1
+            dd_kandian: ${dd()}
+            camp_info: 112
+            consume_info: wsx
+            reduce_kandian: 1
+        method: POST
+    validate:
+        - eq: [ content.status,0]
+        - eq: [ content.data.retCode,1]
+        - eq: [ content.data.retMsg,成功]
+        - eq: [ content.data.data.user_id,$user_id2]
+
+-
+    name: 重复消费同一章_1200
+    request:
+        url: /cpsconsume/portal/1200
+        json:
+            type: 1
+            kandian: 10
+            free_kandian: 10
+            user_id: $user_id3
+            chapter_name: 011
+            requestId: ${requestId()}
+            book_name: 121
+            chapter_id: 5
+            book_id: 112
+            dd_kandian: 1
+            reduce_kandian: 1
+        method: POST
+    validate:
+        - eq: [ content.status,0]
+        - eq: [ content.data.retCode,2]
+        - eq: [ content.data.retMsg,消费信息中存在该记录]
+        - eq: [ content.data.data.book_id,112]
+
+-
+    name: 后台+资产1304
+    request:
+        url: /cpsconsume/portal/1304
+        json:
+            type: 1
+            kandian: 10
+            free_kandian: 12
+            remain_kandian: 10
+            remain_free_kandian: 12
+            dd: ${dd()}
+            requestId: ${requestId()}
+            user_id: $user_id
+            notes: 110
+            business_line: edd
+            way_type: 0
+        method: POST
+    validate:
+        - eq: [ content.status,0]
+        - eq: [ content.data,True]
+        - eq: [ content.message,success]
+
+-
+    name: 后台-减资产1304
+    request:
+        url: /cpsconsume/portal/1304
+        json:
+            type: 1
+            kandian: 10
+            free_kandian: 12
+            remain_kandian: 10
+            remain_free_kandian: 12
+            dd: ${dd()}
+            requestId: ${requestId()}
+            user_id: $user_id
+            notes: 110
+            business_line: okc
+            way_type: 0
+            reduce_num: 1
+        method: POST
+
+-
+    name: 后台+VIP1304
+    request:
+        url: /cpsconsume/portal/1304
+        json:
+            type: 2
+            day: 2
+            hour: 10
+            edit_type: 1
+            extend_type: 1
+            dd: ${dd()}
+            requestId: ${requestId()}
+            user_id: $user_id
+            notes: 110
+            business_line: vvvbb
+            way_type: 0
+        method: POST
+    validate:
+        - eq: [ content.status,0]
+        - eq: [ content.data,True]
+        - eq: [ content.message,success]
+
+-
+    name: 后台减VIP1304
+    request:
+        url: /cpsconsume/portal/1304
+        json:
+            type: 2
+            day: -2
+            hour: 10
+            edit_type: 1
+            extend_type: 1
+            dd: ${dd()}
+            requestId: ${requestId()}
+            user_id: $user_id
+            notes: 1101011
+            business_line: 1101011
+            way_type: 0
+        method: POST
+    validate:
+        - eq: [ content.status,0]
+        - eq: [ content.data,True]
+        - eq: [ content.message,success]
+
+-
+    name: 充值记录db1302
+    request:
+        url: /cpsconsume/portal/1302
+        json:
+            page: 2
+            user_id: $user_id
+            size: 20
+            requestId: ${requestId()}
+        method: POST
+    validate:
+        - eq: [ content.status,0]
+        - eq: [ content.data.data.0.user_id,$user_id]
+
+-
+    name: 充值记录redis1303
+    request:
+        url: /cpsconsume/portal/1303
+        json:
+            page: 2
+            size: 20
+            requestId: ${requestId()}
+            user_id: $user_id
+        method: POST
+    validate:
+        - eq: [ content.status,0]
+        - eq: [ content.data.data.0.user_id,$user_id]
+
+-
+    name: 是否有充值行为_1202
+    request:
+        url: /cpsconsume/portal/1202
+        json:
+            user_id: $user_id
+            requestId: ${requestId()}
+        method: POST
+    validate:
+        - eq: [ content.status,0]
+        - eq: [ content.message,success]
+
+-
+    name: VipEndTime1305
+    request:
+        url: /cpsconsume/portal/1305
+        json:
+            user_id: $user_id
+            requestId: ${requestId()}
+        method: POST
+    validate:
+        - eq: [ content.status,0]
+        - contains: [ content.data,vip_end_time]
+
+-
+    name: 剩余资产1301
+    request:
+        url: /cpsconsume/portal/1301
+        json:
+            requestId: ${requestId()}
+            user_id: $user_id
+        method: POST
+    validate:
+        - eq: [ content.status,0]
+        - contains: [ content.data,kandian]

@@ -1,7 +1,7 @@
 import datetime
 import random
 import string
-from httprunner import __version__
+import time
 
 
 def end_time():
@@ -28,17 +28,25 @@ def requestId():
     return ''.join(random.sample(string.ascii_letters + string.digits, 10))
 
 
-def assert_back(code, content):
-    if code == 0:
-        assert content.__contains__('task_id') and str(content).isdigit()
-        return True
-    elif code == 10007:
-        assert isinstance(content, list)
-        return True
-    else:
-        return False
+def end_timestamp():
+    return int(time.time()) + 184600
+
+
+def timestamp():
+    return int(time.time())
+
+
+def start_timestamp():
+    return int(time.time() - 172800)
+
+
+def random_book():
+    return random.randint(1, 9999999)
+
+
+def dd():
+    return random.randint(0, 1)
 
 
 if __name__ == '__main__':
-    print(end_date())
-    print(start_date())
+    print(timestamp())

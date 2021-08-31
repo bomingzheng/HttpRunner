@@ -1,0 +1,159 @@
+config:
+    name: 书架接口集
+    variables:
+        user_id: 110000123
+        book_id: 11000000251
+    request:
+        headers:
+            Content-Type: application/json
+    base_url: ${ENV(shelf)}
+    verify: False
+
+teststeps:
+
+-
+    name: 新增阅读记录1100
+    request:
+        url: /cpsbookshelf/portal/1100
+        json:
+            user_id: $user_id
+            book_id: $book_id
+            chapter_id: 122055
+            chapter_name: 1、commit
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.book_id,$book_id]
+        - eq: [content.data.chapter_id,122055]
+-
+    name: 更新阅读记录1100
+    request:
+        url: /cpsbookshelf/portal/1100
+        json:
+            user_id: $user_id
+            book_id: $book_id
+            chapter_id: 122056
+            chapter_name: 1、commit1
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.book_id,$book_id]
+        - eq: [content.data.chapter_id,122056]
+-
+    name: 查询书籍是否在阅读记录1103
+    request:
+        url: /cpsbookshelf/portal/1103
+        json:
+            user_id: $user_id
+            book_id: $book_id
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.book_id,$book_id]
+        - eq: [content.data.chapter_id,122056]
+-
+    name: 分页查询阅读记录信息1102
+    request:
+        url: /cpsbookshelf/portal/1102
+        json:
+            user_id: $user_id
+            size: 10
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.pageNo,1]
+        - eq: [content.data.data.0.book_id,$book_id]
+
+-
+    name: 批量删除阅读记录1101
+    request:
+        url: /cpsbookshelf/portal/1101
+        json:
+            user_id: $user_id
+            book_ids:
+                - $book_id
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data,1]
+        - eq: [content.message,success]
+
+-
+    name: 查询不存在书籍_1103
+    request:
+        url: /cpsbookshelf/portal/1103
+        json:
+            user_id: $user_id
+            book_id: $book_id
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.book_id,$book_id]
+
+-
+    name: 新增书架信息1104
+    request:
+        url: /cpsbookshelf/portal/1104
+        json:
+            user_id: $user_id
+            book_id: $book_id
+            chapter_id: 122055
+            chapter_name: 1、post
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.book_id,$book_id]
+        - eq: [content.data.chapter_id,122055]
+-
+    name: 查询书架信息1106
+    request:
+        url: /cpsbookshelf/portal/1106
+        json:
+            user_id: $user_id
+            size: 20
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.data.0.book_id,$book_id]
+        - eq: [content.data.data.0.chapter_id,122055]
+-
+    name: 更新书架信息1104
+    request:
+        url: /cpsbookshelf/portal/1104
+        json:
+            user_id: $user_id
+            book_id: $book_id
+            chapter_id": 122057
+            chapter_name: 2、get
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.book_id,$book_id]
+        - eq: [content.data.chapter_id,122055]
+
+-
+    name: 批量删除书架记录1105
+    request:
+        url: /cpsbookshelf/portal/1105
+        json:
+            user_id: $user_id
+            book_ids:
+                - $book_id
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data,1]
+        - eq: [content.message,success]
+
+-
+    name: 查询书籍是否在书架1107
+    request:
+        url: /cpsbookshelf/portal/1107
+        json:
+            user_id: $user_id
+            book_id: $book_id
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.book_id,$book_id]
+        - eq: [content.data.chapter_id,122055]

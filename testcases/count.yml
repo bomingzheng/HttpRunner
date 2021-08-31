@@ -1,0 +1,592 @@
+config:
+    name: 统计接口集
+    variables:
+        admin: 1823
+        vip: 1819
+        book_id: 11000000251
+    request:
+        headers:
+            Content-Type: application/json
+    base_url: ${ENV(count)}
+    verify: False
+
+teststeps:
+-
+    name: 模板消息统计6000
+    request:
+        url: /statistic/portal/6000
+        json:
+            ids:
+              - 117
+            requestId: ${requestId()}
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,orders]
+
+-
+    name: 模板消息多个统计6000
+    request:
+        url: /statistic/portal/6000
+        json:
+            requestId: ${requestId()}
+            ids:
+              - 117
+              - 96
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,orders]
+
+-
+    name: 客服消息统计6001
+    request:
+        url: /statistic/portal/6001
+        json:
+            requestId: ${requestId()}
+            ids:
+              - 12
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,orders]
+-
+    name: 客服消息统计多条6001
+    request:
+        url: /statistic/portal/6001
+        json:
+            requestId: ${requestId()}
+            ids:
+              - 12
+              - 110
+              - 1004
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,orders]
+
+-
+    name: 抽奖活动渠道商统计6002
+    request:
+        url: /statistic/portal/6002
+        json:
+            requestId: ${requestId()}
+            type: 0
+            aId: 1
+            cId: $admin
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,kandian]
+-
+    name: 抽奖活动总统计6002
+    request:
+        url: /statistic/portal/6002
+        json:
+            requestId: ${requestId()}
+            type: 1
+            aId: 1
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,kandian]
+
+-
+    name: 书籍统计6003
+    request:
+        url: /statistic/portal/6003
+        json:
+            requestId: ${requestId()}
+            ids:
+              - 38
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,orders]
+-
+    name: 书籍统计多个6003
+    request:
+        url: /statistic/portal/6003
+        json:
+            requestId: ${requestId()}
+            ids:
+              - 38
+              - 39
+              - 20
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,orders]
+-
+    name: 高级群发6004
+    request:
+        url: /statistic/portal/6004
+        json:
+            requestId: ${requestId()}
+            ids:
+              - 32
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,uv]
+-
+    name: 推广链接6005
+    request:
+        url: /statistic/portal/6005
+        json:
+            requestId: ${requestId()}
+            ids:
+              - 392552
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,uv]
+-
+    name: 推广链接多个6005
+    request:
+        url: /statistic/portal/6005
+        json:
+            requestId: ${requestId()}
+            ids:
+              - 392552
+              - 392658
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,uv]
+-
+    name: 推广链接历史6006
+    request:
+        url: /statistic/portal/6006
+        json:
+            requestId: ${requestId()}
+            referralId: 392552
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,uv]
+
+-
+    name: 用户统计渠道6007
+    request:
+        url: /statistic/portal/6007
+        json:
+            requestId: ${requestId()}
+            adminId: $admin
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - eq: [content.data.all.adminId,$admin]
+
+-
+    name: 用户统计实时同步渠道6008
+    request:
+        url: /statistic/portal/6008
+        json:
+            requestId: ${requestId()}
+            adminId: $admin
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - eq: [content.data.adminId,$admin]
+
+-
+    name: vip用户统计6009
+    request:
+        url: /statistic/portal/6009
+        json:
+            requestId: ${requestId()}
+            ids:
+                - 1749
+                - $admin
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.all,increaseM]
+
+-
+    name: 用户当日统计6010
+    request:
+          url: /statistic/portal/6010
+          json:
+              requestId: ${requestId()}
+              ids:
+                - 1749
+                - $admin
+          method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,adminId]
+-
+    name: 用户当日多渠道统计6010
+    request:
+        url: /statistic/portal/6010
+        json:
+            requestId: ${requestId()}
+            ids:
+              - 1749
+              - $admin
+              - 1780
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,adminId]
+-
+    name: 关键字统计6011
+    request:
+          url: /statistic/portal/6011
+          json:
+              requestId: ${requestId()}
+              ids:
+                - 1
+          method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,uv]
+
+-
+    name: 二维码关注统计6012
+    request:
+        url: /statistic/portal/6012
+        json:
+            requestId: ${requestId()}
+            ids:
+              - 1
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,uv]
+
+-
+    name: 头条统计6013
+    request:
+        url: /statistic/portal/6013
+        json:
+            requestId: ${requestId()}
+            ids:
+              - 1
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,toutiaoId]
+
+-
+    name: UC统计6014
+    request:
+        url: /statistic/portal/6014
+        json:
+            requestId: ${requestId()}
+            ids:
+              - 1
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,ucId]
+-
+    name: 活动统计6015
+    request:
+        url: /statistic/portal/6015
+        json:
+            requestId: ${requestId()}
+            adminIds:
+              - $admin
+              - 1780
+              - 1749
+            ids:
+              - 178
+              - 302
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,activityId]
+
+-
+    name: 小说统计6016
+    request:
+        url: /statistic/portal/6016
+        json:
+            requestId: ${requestId()}
+            adminId: $admin
+            sortType: 1
+            page: 1
+            size: 20
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - eq: [content.data.data.0.adminId,$admin]
+-
+    name: pv统计6017
+    request:
+        url: /statistic/portal/6017
+        json:
+            requestId: ${requestId()}
+            ids:
+              - $admin
+            dayNum: 100
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,pv]
+-
+    name: 月卡单渠道查询统计6018
+    request:
+        url: /statistic/portal/6018
+        json:
+            requestId: ${requestId()}
+            aId: 2
+            cId: $admin
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+-
+    name: 月卡单渠道查询统计6019
+    request:
+        url: /statistic/portal/6019
+        json:
+            requestId: ${requestId()}
+            aId: 2
+            cId: $admin
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+-
+    name: 快手统计6020
+    request:
+        url: /statistic/portal/6020
+        json:
+            requestId: ${requestId()}
+            ids:
+              - 1
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.0,orders]
+
+-
+    name: 新用户充值统计6021
+    request:
+        url: /statistic/portal/6021
+        json:
+            requestId: ${requestId()}
+            aId: 1
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+-
+    name: 充值回传统计6022
+    request:
+        url: /statistic/portal/6022
+        json:
+            requestId: ${requestId()}
+            adminId: $admin
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+-
+    name: 充值回传详情统计6023
+    request:
+        url: /statistic/portal/6023
+        json:
+            requestId: ${requestId()}
+            adminId: $admin
+            date: 20201103
+            page: 1
+            pagesize: 20
+            type: 1
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - eq: [content.data.records.0.adminId,$admin]
+
+-
+    name: 新用户充值回馈6024
+    request:
+        url: /statistic/portal/6024
+        json:
+            requestId: ${requestId()}
+            aId: 1
+            vipId: $vip
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+
+-
+    name: 渠道活动6025
+    request:
+        url: /statistic/portal/6025
+        json:
+            activityId: 999
+            requestId: ${requestId()}
+            channelId: $admin
+            startTime: ${start_timestamp()}
+            endTime: ${timestamp()}
+            size: 10
+            current: 1
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+-
+    name: 用户统计渠道6026
+    request:
+        url: /statistic/portal/6026
+        json:
+            requestId: ${requestId()}
+            ids:
+              - $admin
+            date: 20210831
+            isSuper: 1
+            pagesize: 10
+            page: 1
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+
+-
+    name: 小说统计渠道6027
+    request:
+        url: /statistic/portal/6027
+        json:
+            requestId: ${requestId()}
+            ids:
+              - $admin
+            startTime: ${start_timestamp()}
+            endTime: ${timestamp()}
+            isSuper: 1
+            bookId: $book_id
+            pagesize: 10
+            page: 1
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+
+-
+    name: 破冰充值6028
+    request:
+        url: /statistic/portal/6028
+        json:
+            requestId: ${requestId()}
+            payType: 1
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+
+-
+    name: 破冰导出6029
+    request:
+        url: /statistic/portal/6029
+        json:
+            requestId: ${requestId()}
+            payType: 2
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+
+-
+    name: 互动广告6030
+    request:
+        url: /statistic/portal/6030
+        json:
+            requestId: ${requestId()}
+            startTime: ${start_timestamp()}
+            endTime: ${timestamp()}
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+
+-
+    name: 互动广告分渠道数据6031
+    request:
+        url: /statistic/portal/6031
+        json:
+            requestId: ${requestId()}
+            channelId: $admin
+            startTime: ${start_timestamp()}
+            endTime: ${timestamp()}
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+
+-
+    name: 互动广告分渠道数据6032
+    request:
+        url: /statistic/portal/6032
+        json:
+            requestId: ${requestId()}
+            isSelectAll : 1
+            startTime: ${start_timestamp()}
+            endTime: ${timestamp()}
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+
+-
+    name: 互动广告导出统计6033
+    request:
+        url: /statistic/portal/6033
+        json:
+            requestId: ${requestId()}
+            startTime: ${start_timestamp()}
+            endTime: ${timestamp()}
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+-
+    name: 互动广告每日汇总统计6034
+    request:
+        url: /statistic/portal/6034
+        json:
+            requestId: ${requestId()}
+            startTime: ${start_timestamp()}
+            endTime: ${timestamp()}
+            page: 1
+            pageSize: 20
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+-
+    name: 互动广告每日分渠道统计6035
+    request:
+        url: /statistic/portal/6035
+        json:
+            requestId: ${requestId()}
+            startTime: ${start_timestamp()}
+            endTime: ${timestamp()}
+            isSelectAll: 1
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+-
+    name: 互动广告每日分广告统计6036
+    request:
+        url: /statistic/portal/6036
+        json:
+            requestId: ${requestId()}
+            startTime: ${start_timestamp()}
+            endTime: ${timestamp()}
+            isSelectAll: 1
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+-
+    name: 互动广告每日分广告统计6038
+    request:
+        url: /statistic/portal/6038
+        json:
+            requestId: ${requestId()}
+            startTime: ${start_timestamp()}
+            endTime: ${timestamp()}
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+-
+    name: 互动广告每日分广告统计6500
+    request:
+        url: /statistic/portal/6500
+        json:
+            payType: 1
+            pushNum: 199
+            pushSuccNum: 123
+            sendTime: ${timestamp()}
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
