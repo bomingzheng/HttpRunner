@@ -48,5 +48,9 @@ def dd():
     return random.randint(0, 1)
 
 
+def tr():
+    return ''.join(random.sample(string.ascii_letters+string.digits, 28))
+
+
 if __name__ == '__main__':
-    print(timestamp())
+    print(tr())

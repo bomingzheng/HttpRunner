@@ -1,0 +1,118 @@
+config:
+    name: 听书接口集
+    variables:
+        uid: 110000163
+        book: 30000000186
+    request:
+        headers:
+            Content-Type: application/json
+            userId: 110000063
+    base_url: ${ENV(audio1)}
+    verify: False
+
+
+teststeps:
+-
+    name: 首页信息_男
+    request:
+        url: /audioapi/index/index
+        json:
+            code: 101
+            ip: 127.0.0.1
+            user_id: 7
+            admin_id: 1844
+            type: boy
+        method: POST
+    validate:
+        - eq: [content.code,1000]
+        - eq: [content.data.current,boy]
+-
+    name: 首页信息_女
+    request:
+        url: /audioapi/index/index
+        json:
+            code: 101
+            ip: 127.0.0.1
+            user_id: 7
+            admin_id: 1844
+            type: girl
+        method: POST
+    validate:
+        - eq: [content.code,1000]
+        - eq: [content.data.current,girl]
+-
+  name: 分类信息_1页
+  request:
+      url: /audioapi/index/index
+      json:
+          code: 102
+          page: 1
+          user_id: 7
+          block_id: 9
+          Content-Type: application/json
+      method: POST
+  validate:
+      - eq: [content.code,1000]
+      - contains: [content.data.data.0,id]
+-
+    name: 书籍详情_单本
+    request:
+        url: /audioapi/index/index
+        json:
+            code: 104
+            user_id: 7
+            books_id: 30000000186
+        method: POST
+    validate:
+        - eq: [content.code,1000]
+        - contains: [content.data,'30000000186']
+-
+    name: 书籍详情_多本
+    request:
+        url: /audioapi/index/index
+        json:
+            code: 104
+            user_id: 7
+            books_id: 30000000186,30000000187,30000000188
+        method: POST
+    validate:
+        - eq: [content.code,1000]
+        - contains: [content.data,'30000000186']
+-
+    name: 章末推书_男
+    request:
+        url: /audioapi/index/index
+        json:
+            code: 103
+            sex: 1
+            size: 10
+            user_id: 7
+        method: POST
+    validate:
+        - eq: [content.code,1000]
+        - contains: [content.data.0,book_id]
+-
+    name: 章末推书_女
+    request:
+        url: /audioapi/index/index
+        json:
+            code: 103
+            sex: 2
+            size: 10
+            user_id: 7
+        method: POST
+    validate:
+        - eq: [content.code,1000]
+        - contains: [content.data.0,book_id]
+
+#-
+#    name: 书籍片花
+#    request:
+#        url: http://192.168.0.10:9091/coop-client/portal/cps/trailers/getTrailersByBookId
+#        json:
+#            bookId: 30000000191
+#        method: POST
+
+
+
+

@@ -1,0 +1,30 @@
+
+config:
+    name: "demo testsuite"
+
+testcases:
+-
+    name: 后台导出
+    testcase: ./testcases/back.yml
+
+-
+    name: 书架
+    testcase: ./testcases/book.yml
+-
+    name: 资产变更
+    testcase: ./testcases/assets.yml
+-
+    name: 注册
+    testcase: ./testcases/register.yml
+-
+    name: 导出接口
+    testcase: ./testcases/export.yml
+-
+    name: 统计接口
+    testcase: ./testcases/count.yml
+-
+    name: 听书php接口
+    testcase: ./testcases/audio.yml
+-
+    name: 听书java接口
+    testcase: ./testcases/audio1.yml

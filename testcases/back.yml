@@ -683,15 +683,15 @@ teststeps:
         json:
             channel_id: $channel
             vip_id: 1819
-            client_id: $client
+            client_id: 10005589
             nonce: "123456"
             timestamp: 1583868236
             requestId: ${requestId()}
-            signaure: $sign
+            signaure: 7907d2b6bccfd64005631f6813fb8c91cc0e99dd
         headers: $headers
     validate:
         - eq: [content.error_code,0]
-        - contains: [content.data,task_id]
+        - contains: [content.data.0,id]
 
 -
     name: 梦佳赠币接口
@@ -701,16 +701,16 @@ teststeps:
         json:
             channel_id: $channel
             kandian: 24
-            client_id: $client
+            client_id: 10005589
             nonce: "123456"
             timestamp: 1583868236
             requestId: ${requestId()}
-            signaure: $sign
+            signaure: 7907d2b6bccfd64005631f6813fb8c91cc0e99dd
             user_id: 110000061
         headers: $headers
     validate:
         - eq: [content.error_code,0]
-        - contains: [content.data,task_id]
+        - contains: [content.data.0,id]
 
 -
     name: 梦佳查询用户信息接口
@@ -719,13 +719,13 @@ teststeps:
         url: /channeldata/real/user/getUserInfo
         json:
             channel_id: $channel
-            client_id: $client
+            client_id: 10005589
             nonce: "123456"
             timestamp: 1583868236
             requestId: ${requestId()}
-            signaure: $sign
+            signaure: 7907d2b6bccfd64005631f6813fb8c91cc0e99dd
             user_id: 110000061
         headers: $headers
     validate:
         - eq: [content.error_code,0]
-        - contains: [content.data,task_id]
+        - contains: [content.data.0,id]

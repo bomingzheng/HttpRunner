@@ -1,0 +1,229 @@
+config:
+    name: 听书接口集
+    variables:
+        uid: 110000123
+        book: 30000000187
+    request:
+        headers:
+            Content-Type: application/json
+            userId: 110000063
+    base_url: ${ENV(audio)}
+    verify: False
+
+teststeps:
+-
+    name: 个人信息1000
+    request:
+        url: /audio/entry/1000
+        json:
+            requestId: ${requestId()}
+            userId: 553282307
+        method: POST
+    validate:
+        - eq: [content.status,0]
+-
+    name: 单章加载1103
+    request:
+        url: /audio/entry/1103
+        json:
+            requestId: ${requestId()}
+            bookId: 30000000187
+            chapterId: 46686865
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - eq: [content.data.chapterIndex,0]
+-
+    name: 下单接口1301
+    request:
+        url: /audio/entry/1301
+        json:
+            requestId: ${requestId()}
+            openId: oOEMn00OAWKZKL6NV90NhiznGqGo
+            goodsId: 45
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+-
+    name: 添加绑定关系4001
+    request:
+        url: /audio/entry/4001
+        json:
+            requestId: ${requestId()}
+            userId: 110000123
+            openId: oOEMn00OAWKZKL6NV90NhiznGqGo
+            channelId: 1844
+            utdId: 1234
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - eq: [content.data.result,true]
+-
+    name: 删除单本阅读记录1101
+    request:
+        url: /audio/entry/1101
+        json:
+            requestId: ${requestId()}
+            bookIds:
+              - 30000000187
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - eq: [content.data.code,1]
+-
+    name: 删除多本阅读记录1101
+    request:
+        url: /audio/entry/1101
+        json:
+            requestId: ${requestId()}
+            bookIds:
+              - 30000000187
+              - 30000000186
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - eq: [content.data.code,1]
+
+-
+    name: 充值记录1001-1页
+    request:
+        url: /audio/entry/1001
+        json:
+            requestId: ${requestId()}
+            userId: 553282307
+            page: 1
+            size: 10
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+
+-
+    name: 用户阅读记录1100
+    request:
+        url: /audio/entry/1100
+        json:
+            requestId: ${requestId()}
+            page: 1
+            size: 20
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.content.0,bookId]
+-
+    name: 删除用户阅读记录查询1100
+    request:
+        url: /audio/entry/1100
+        json:
+            requestId: ${requestId()}
+            page: 1
+            size: 20
+            utime: 1607013193000
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data.content.0,bookId]
+-
+    name: 首页信息男1200
+    request:
+        url: /audio/entry/1200
+        json:
+            requestId: ${requestId()}
+            userId: 1
+            adminId: 1844
+            type: 1
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data,cityType]
+
+-
+    name: 首页信息女1200
+    request:
+        url: /audio/entry/1200
+        json:
+            requestId: ${requestId()}
+            userId: 1
+            adminId: 1844
+            type: 2
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data,cityType]
+-
+    name: 首页分类信息1201
+    request:
+        url: /audio/entry/1201
+        json:
+            requestId: ${requestId()}
+            userId: 1
+            page: 1
+            blockId: 9
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+        - contains: [content.data,data]
+-
+    name: 书籍详情1400
+    request:
+        url: /audio/entry/1400
+        json:
+            requestId: ${requestId()}
+            bookId: 30000000192
+        method: POST
+    validate:
+        - eq: [content.retCode,3000]
+-
+    name: 书籍章节目录1401
+    request:
+        url: /audio/entry/1401
+        json:
+            requestId: ${requestId()}
+            bookId: 30000000187
+            page: 1
+            pageSize: 20
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+-
+    name: 获取openId4000
+    request:
+          url: /audio/entry/4000
+          json:
+              requestId: ${requestId()}
+              code: 091KsHFa1z8U0B092OGa1LktrO1KsHFa
+          method: POST
+    validate:
+        - eq: [content.retCode,0]
+
+-
+    name: 章末推书男1202
+    request:
+        url: /audio/entry/1202
+        json:
+            requestId: ${requestId()}
+            sex: 1
+            size: 10
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+-
+    name: 章末推书女1202
+    request:
+        url: /audio/entry/1202
+        json:
+            requestId: ${requestId()}
+            sex: 2
+            size: 10
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+-
+    name: 商品列表1300
+    request:
+        url: /audio/entry/1300
+        json:
+             requestId: ${requestId()}
+        method: POST
+    validate:
+        - eq: [content.retCode,0]
+

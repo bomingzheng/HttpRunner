@@ -1,0 +1,93 @@
+config:
+    name: 注册接口集
+    variables:
+        admin: 1823
+        open: ofa3MwLyvzBa_i5yZxYZ3JkgbFVA
+        uid: 110000061
+    request:
+        headers:
+            Content-Type: application/json
+    base_url: ${ENV(register)}
+    verify: False
+
+teststeps:
+-
+    name: 新用户注册1000
+    request:
+        url: /cpsregister/portal/1000
+        json:
+            openid: ${tr()}
+            channel_id: $admin
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.channel_id,$admin]
+
+
+-
+    name: 根据openId查询用户1002
+    request:
+        url: /cpsregister/portal/1002
+        json:
+            openid: $open
+            channel_id: $admin
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.id,$uid]
+
+-
+    name: 根据userId查询用户1003
+    request:
+        url: /cpsregister/portal/1003
+        json:
+            id: $uid
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.openid,$open]
+
+-
+    name: 更新用户信息1001
+    request:
+        url: /cpsregister/portal/1001
+        json:
+            sex: 1
+            id: $uid
+            subscribe_time: ${search_date()}
+        method: POST
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.id,$uid]
+-
+    name: 查询无效用户1003
+    request:
+        url: /cpsregister/portal/1003
+        json:
+            id: 547
+        method: POST
+    validate:
+        - eq: [content.status,104]
+        - contains: [content.message,没有找到用户]
+
+-
+    name: 查询用户缺少必要参数1003
+    request:
+        url: /cpsregister/portal/1003
+        json:
+            id: ""
+        method: POST
+    validate:
+        - eq: [content.status,103]
+        - contains: [content.message,缺少必要参数]
+
+-
+      name: 查询无效openI用户1002
+      request:
+          url: /cpsregister/portal/1002
+          json:
+              openid: yb
+              channel_id: $admin
+          method: POST
+      validate:
+          - eq: [content.status,0]

@@ -1,0 +1,177 @@
+config:
+    name: 资产变更接口集
+    variables:
+        admin: 1823
+        vip: 1819
+    request:
+        headers:
+            Content-Type: application/json
+    base_url: ${ENV(export)}
+    verify: False
+
+teststeps:
+-
+    name: 渠道es查询客服消息
+    request:
+        url: /es/data/portal/custom/search/page
+        method: POST
+        json:
+            requestId: ${requestId()}
+            groupId: 3
+            adminId: $admin
+            size: 10
+            type: 1
+            page: 1
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.data.0.admin_id,$admin]
+-
+    name: 渠道es客服消息导出
+    request:
+        url: /es/data/portal/custom/export/api
+        method: POST
+        json:
+            groupId: 3
+            requestId: ${requestId()}
+            adminId: $admin
+            size: 10
+            type: 1
+            page: 1
+            exportAdminId: $admin
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.retCode,0]
+
+-
+    name: VIP客服消息es导出
+    request:
+        url: /es/data/portal/custom/export/api
+        method: POST
+        json:
+            groupId: 7
+            adminId: $vip
+            size: 10
+            type: 1
+            requestId: ${requestId()}
+            page: 1
+            exportAdminId: $vip
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.retCode,0]
+
+-
+    name: VIP客服消息es查询
+    request:
+        url: /es/data/portal/custom/search/page
+        method: POST
+        json:
+            groupId: 7
+            adminId: $vip
+            size: 10
+            type: 1
+            page: 1
+            requestId: ${requestId()}
+    validate:
+        - eq: [content.status,0]
+        - contains: [content.data.data.0,user_json]
+
+-
+    name: 粉丝管理
+    request:
+        url: /es/data/portal/user/search/page
+        method: POST
+        json:
+            groupId: 3
+            adminId: $admin
+            page: 1
+            requestId: ${requestId()}
+            size: 10
+            sort:
+               - id_desc
+               - updatetime_desc
+    validate:
+        - eq: [content.status,0]
+        - contains: [content.data.data.0,openid]
+
+-
+    name: 粉丝导出查询
+    request:
+        url: /es/data/portal/user/export/api
+        method: POST
+        json:
+            groupId: 3
+            adminId: $admin
+            page: 1
+            size: 10
+            requestId: ${requestId()}
+            sort:
+              - id_desc
+            deduct: -1
+            agentId: $admin
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.retCode,0]
+
+-
+    name: 订单查询API
+    request:
+        url: /es/data/portal/order/search/page
+        method: POST
+        json:
+            groupId: 3
+            adminId: $admin
+            page: 1
+            size: 10
+            requestId: ${requestId()}
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.data.0.channel_id,$admin]
+-
+    name: 订单导出查询API
+    request:
+        url: /es/data/portal/order/export/api
+        method: POST
+        json:
+            groupId: 3
+            adminId: $admin
+            page: 1
+            size: 10
+            requestId: ${requestId()}
+            sort:
+              - id_desc
+            deduct: -1
+            agentId: $admin
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.retCode,0]
+
+-
+    name: 推广链接查询API
+    request:
+        url: /es/data/portal/referral/search/page
+        method: POST
+        json:
+            groupId: 3
+            adminId: $admin
+            page: 1
+            requestId: ${requestId()}
+            searchRange: 3
+            size: 10
+    validate:
+        - eq: [content.status,0]
+        - contains: [content.data.data.0,chapter_name]
+-
+    name: 推广链接导出API
+    request:
+        url: /es/data/portal/referral/export/api
+        method: POST
+        json:
+            groupId: 3
+            adminId: $admin
+            page: 3
+            searchRange: 3
+            size: 10
+            requestId: ${requestId()}
+    validate:
+        - eq: [content.status,0]
+        - eq: [content.data.retCode,0]
