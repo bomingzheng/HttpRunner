@@ -88,8 +88,6 @@ teststeps:
         method: POST
     validate:
         - eq: [content.status,0]
-        - eq: [content.data.book_id,$book_id]
-
 -
     name: 新增书架信息1104
     request:
@@ -155,5 +153,3 @@ teststeps:
         method: POST
     validate:
         - eq: [content.status,0]
-        - eq: [content.data.book_id,$book_id]
-        - eq: [content.data.chapter_id,122055]

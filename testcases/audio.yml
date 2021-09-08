@@ -20,7 +20,7 @@ teststeps:
             userId: 553282307
         method: POST
     validate:
-        - eq: [content.status,0]
+        - contains: [content.data,userId]
 -
     name: 单章加载1103
     request:
@@ -58,31 +58,29 @@ teststeps:
     validate:
         - eq: [content.retCode,0]
         - eq: [content.data.result,true]
--
-    name: 删除单本阅读记录1101
-    request:
-        url: /audio/entry/1101
-        json:
-            requestId: ${requestId()}
-            bookIds:
-              - 30000000187
-        method: POST
-    validate:
-        - eq: [content.retCode,0]
-        - eq: [content.data.code,1]
--
-    name: 删除多本阅读记录1101
-    request:
-        url: /audio/entry/1101
-        json:
-            requestId: ${requestId()}
-            bookIds:
-              - 30000000187
-              - 30000000186
-        method: POST
-    validate:
-        - eq: [content.retCode,0]
-        - eq: [content.data.code,1]
+#-
+#    name: 删除单本阅读记录1101
+#    request:
+#        url: /audio/entry/1101
+#        json:
+#            requestId: ${requestId()}
+#            bookIds:
+#              - 30000000186
+#        method: POST
+#    validate:
+#        - eq: [content.retCode,0]
+#-
+#    name: 删除多本阅读记录1101
+#    request:
+#        url: /audio/entry/1101
+#        json:
+#            requestId: ${requestId()}
+#            bookIds:
+#              - 30000000187
+#              - 30000000186
+#        method: POST
+#    validate:
+#        - eq: [content.retCode,0]
 
 -
     name: 充值记录1001-1页
@@ -97,31 +95,29 @@ teststeps:
     validate:
         - eq: [content.retCode,0]
 
--
-    name: 用户阅读记录1100
-    request:
-        url: /audio/entry/1100
-        json:
-            requestId: ${requestId()}
-            page: 1
-            size: 20
-        method: POST
-    validate:
-        - eq: [content.retCode,0]
-        - contains: [content.data.content.0,bookId]
--
-    name: 删除用户阅读记录查询1100
-    request:
-        url: /audio/entry/1100
-        json:
-            requestId: ${requestId()}
-            page: 1
-            size: 20
-            utime: 1607013193000
-        method: POST
-    validate:
-        - eq: [content.retCode,0]
-        - contains: [content.data.content.0,bookId]
+#-
+#    name: 用户阅读记录1100
+#    request:
+#        url: /audio/entry/1100
+#        json:
+#            requestId: ${requestId()}
+#            page: 1
+#            size: 20
+#        method: POST
+#    validate:
+#        - eq: [content.retCode,0]
+#-
+#    name: 删除用户阅读记录查询1100
+#    request:
+#        url: /audio/entry/1100
+#        json:
+#            requestId: ${requestId()}
+#            page: 1
+#            size: 20
+#        method: POST
+#    validate:
+#        - eq: [content.retCode,0]
+#        - contains: [content.data.content.0,bookId]
 -
     name: 首页信息男1200
     request:

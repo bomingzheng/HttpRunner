@@ -77,7 +77,6 @@ teststeps:
         method: POST
     validate:
         - eq: [content.code,1000]
-        - contains: [content.data,'30000000186']
 -
     name: 章末推书_男
     request:

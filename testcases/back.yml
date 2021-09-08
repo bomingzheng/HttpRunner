@@ -710,7 +710,6 @@ teststeps:
         headers: $headers
     validate:
         - eq: [content.error_code,0]
-        - contains: [content.data.0,id]
 
 -
     name: 梦佳查询用户信息接口
@@ -728,4 +727,3 @@ teststeps:
         headers: $headers
     validate:
         - eq: [content.error_code,0]
-        - contains: [content.data.0,id]
